@@ -2,19 +2,22 @@ import * as React from 'react'
 import { Link, graphql } from 'gatsby'
 import Layout from '../components/layout'
 import Seo from '../components/seo'
+import { GatsbyImage } from 'gatsby-plugin-image'
 
 const BlogPage = ({data}) => {
   return (
     <Layout pageTitle="My Blog Posts">
       {
         data.allMdx.nodes.map(node => (
-          <article key={node.id}>
+          <grid key={node.id}>
             <Link to={`/blog/${node.frontmatter.slug}`}>
-              <h2>{node.frontmatter.title}</h2>
+              <GatsbyImage 
+                image={node.frontmatter.heroimage.childImageSharp.gatsbyImageData}
+                alt=""
+              />
             </Link>
             <p>Posted: {node.frontmatter.date}</p>
-            <p>{node.excerpt}</p>
-          </article>
+          </grid>
         ))
       }
     </Layout>
@@ -29,9 +32,13 @@ query {
         title
         date(formatString: "D MMMM, yyyy")
         slug
+        heroimage {
+          childImageSharp {
+            gatsbyImageData
+          }
+        }
       }
       id
-      excerpt
     }
   }
 }`
